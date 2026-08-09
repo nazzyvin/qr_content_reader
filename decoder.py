@@ -1,39 +1,47 @@
-from pyzbar.pyzbar import decode
+import cv2
+import numpy as np
+
+from io import BytesIO
 from PIL import Image
 
 
+try:
+    from pyzbar.pyzbar import decode as __pyzbar_decode
+    HAVE_PYZBAR = True
+except Exception:
+    HAVE_PYZBAR = False
+
+
+def decode_qr_bytes(image_bytes):
+    """Decodes QR codes and many other barcode formats from image bytes."""
+
+    # Try pyzbar first: QR + Code 128/39, EAN-13/8, UPC-A/E, ITF, etc.
+    if HAVE_PYZBAR:
+        try:
+            result = __pyzbar_decode(Image.open(BytesIO(image_bytes)))
+            if result:
+                return result[0].data.decode("utf-8")
+        except Exception:
+            pass
+
+    # Fall back to OpenCV QR-only detection (still works if libzbar0 is missing)
+    image = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
+    if image is not None:
+        decoded, _, _ = cv2.QRCodeDetector().detectAndDecode(image)
+        if decoded:
+            return decoded
+
+    return None
+
+
 def decode_qr(image_path):
-    """
-    Reads a QR code from an image and returns its decoded content.
-
-    Args:
-        image_path (str): Path to the image containing the QR code.
-
-    Returns:
-        str | None:
-            - The decoded QR code data as a string if successful.
-            - None if no QR code is found or an error occurs.
-    """
+    """Reads a QR/barcode from an image file. Kept for the CLI."""
     try:
-        # Open the image from the specified file path
-        image = Image.open(image_path)
-
-        # Detect and decode any QR codes in the image
-        decoded = decode(image)
-
-        # Return None if no QR code was found
-        if not decoded:
-            return None
-
-        # Return the data from the first detected QR code as a UTF-8 string
-        return decoded[0].data.decode("utf-8")
-
+        with open(image_path, "rb") as file:
+            return decode_qr_bytes(file.read())
     except FileNotFoundError:
-        # Handle the case where the image file doesn't exist
         print("❌ File not found.")
         return None
-
     except Exception as e:
-        # Handle any other unexpected errors
         print(f"❌ {e}")
         return None
