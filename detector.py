@@ -20,11 +20,41 @@ def detect_content(data):
              - ZIP
              - RAR
              - TEXT
+             - CONTACT
+             - WIFI
+             - LOCATION
+             - EMAIL
+             - PHONE
+             - SMS
     """
 
     # Return UNKNOWN if the QR code contains no data
     if not data:
         return "UNKNOWN"
+
+    # Check if the content is a vCard (contact)
+    if data.startswith("BEGIN:VCARD"):
+        return "CONTACT"
+
+    # Check if the content is a Wi-Fi configuration
+    if data.startswith("WIFI:"):
+        return "WIFI"
+
+    # Check if the content is a GPS location
+    if data.startswith(("geo:", "GEO:")):
+        return "LOCATION"
+
+    # Check if the content is an email address
+    if data.startswith(("mailto:", "MATMSG:")):
+        return "EMAIL"
+
+    # Check if the content is a phone number
+    if data.startswith("tel:"):
+        return "PHONE"
+
+    # Check if the content is an SMS message
+    if data.startswith(("SMSTO:", "sms:", "smsto:")):
+        return "SMS"
 
     # Check if the content is a URL
     if data.startswith(("http://", "https://")):
@@ -71,6 +101,7 @@ def detect_content(data):
 
         # If it's a URL but doesn't match any known file type
         return "URL"
+
 
     # If the data is not a URL, treat it as plain text
     return "TEXT"
