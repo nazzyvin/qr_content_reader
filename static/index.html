@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Content Extractor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <main>
+        <h1>📷 QR Content Extractor</h1>
+
+        <div id="drop-zone">
+            <p>Drop a QR code image here</p>
+            <label for="file-input" class="btn">Choose File</label>
+            <input type="file" id="file-input" accept="image/*" hidden>
+        </div>
+
+        <div id="status" class="status hidden"></div>
+
+        <section id="result" class="hidden">
+            <div class="result-header">
+                <span id="type-badge" class="badge"></span>
+            </div>
+            <pre id="content"></pre>
+            <div id="details"></div>
+            <h3>Actions</h3>
+            <div id="actions"></div>
+        </section>
+    </main>
+    <script src="/static/script.js"></script>
+</body>
+</html>

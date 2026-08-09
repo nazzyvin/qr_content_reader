@@ -1,46 +1,45 @@
-# Import required functions from other modules
-from decoder import decode_qr          # Decodes QR code from image file
-from detector import detect_content    # Identifies what type of data is in the QR code
-from handlers import handle_content    # Performs action based on data type
+from fastapi import FastAPI, UploadFile, File
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
+from typing import Optional
+
+from extractor import extract_from_bytes
 
 
-while True:
+class DecodeResult(BaseModel):
+    """API response shape for a decode request."""
 
-    # Get image path from user
-    image_path = input("\nEnter the QR image path: ")
+    success: bool
+    content_type: Optional[str] = None
+    content: Optional[str] = None
+    details: Optional[dict] = None
+    actions: Optional[list] = None
+    error: Optional[str] = None
 
-    # Decode the QR code (returns the data or None if failed)
-    result = decode_qr(image_path)
 
-    # Check if QR code was successfully decoded
-    if result:
+app = FastAPI(title="QR Content Extractor")
 
-        # Determine what kind of data was decoded
-        content_type = detect_content(result)
+#Serve static frontend assets
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-        # Show success message and decoded data
-        print("\n✅ QR Code Decoded Successfully!\n")
-        print(f"Type: {content_type}")
-        print(f"Content: {result}")
 
-        # Execute appropriate action and store returned command
-        action = handle_content(content_type, result)
+@app.get("/")
+async def index():
+    """Serve the frontend page."""
+    return FileResponse("static/index.html")
 
-        # If user chooses decode another QR, restart loop
-        if action == "decode":
-            continue
 
-        # If user chooses exit, stop program
-        elif action == "exit":
-            print("\n👋 Goodbye!")
-            break
+@app.post("/api/decode", response_model=DecodeResult)
+async def decode(file: UploadFile = File(...)):
+    """
+    Decode a QR code from an uploaded image.
 
-    else:
-        print("\n❌ No QR Code Found.")
+    Args:
+        file (UploadFile): The uploaded image file.
 
-        # Ask if user wants to try again
-        retry = input("\nTry another QR? (y/n): ")
-
-        if retry.lower() != "y":
-            print("\n👋 Goodbye!")
-            break
+    Returns:
+        DecodeResult: The decoded content, its type, parsed details, and available actions
+    """
+    image_bytes = await file.read()
+    return extract_from_bytes(image_bytes)

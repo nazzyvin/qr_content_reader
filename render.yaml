@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: qr-content-extractor
+    runtime: docker
+    plan: free
+    healthCheckPath: /
