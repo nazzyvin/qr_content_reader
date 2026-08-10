@@ -997,22 +997,35 @@ html.dark .chip--orange  { --tone: #fb923c; }
 
 /* FOOTER */
 .site-footer {
-  margin-top: 3.5rem;
-  padding: 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
   border-top: 1px solid var(--border);
-  text-align: center;
-  font-size: 0.78rem;
+  align-items: center;
+  padding: 20px 0;
+  margin-top: 40px;
+  font-size: .78rem;
   color: var(--muted);
 }
 
+.footer-left, .footer-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .site-footer a {
-  color: var(--accent-2);
+  color: var(--accent-strong);
   text-decoration: none;
   transition: color 0.18s ease;
 }
 
 .site-footer a:hover {
-  color: var(--accent-strong);
+  color: var(--accent-2);
+}
+
+.footer-divider {
+  opacity: 0.9;
+  padding: 0 1px;
 }
 
 
@@ -1036,6 +1049,22 @@ html.dark .chip--orange  { --tone: #fb923c; }
   .navbar-actions .btn { padding: 0.5rem 0.75rem; }
   #paste-btn span { display: none; }
   #paste-btn { width: 40px; height: 40px; padding: 0; border-radius: 11px; }
+}
+
+/* FOOTER — MOBILE */
+@media (max-width: 600px) {
+  .site-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+    padding: 1.25rem 1rem;
+  }
+
+  .footer-left,
+  .footer-right {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1062,6 +1091,17 @@ html.dark .chip--orange  { --tone: #fb923c; }
   .empty-illustration { width: 96px; height: 96px; border-radius: 26px; }
 
   #toasts { left: 1rem; right: 1rem; max-width: none; bottom: 1rem; }
+}
+
+@media (max-width: 400px) {
+  .footer-right {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .footer-divider {
+    display: none;
+  }
 }
 
 /* ============================================================
