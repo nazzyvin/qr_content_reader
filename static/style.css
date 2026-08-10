@@ -997,15 +997,21 @@ html.dark .chip--orange  { --tone: #fb923c; }
 
 /* FOOTER */
 .site-footer {
-  display: flex;
-  justify-content: space-between;
   border-top: 1px solid var(--border);
-  align-items: center;
-  padding: 20px 1.5rem;
-  margin: 40px auto 0;
-  max-width: 1220px;
+  margin: 40px 0 0;
+  padding: 20px 0;
   font-size: .78rem;
   color: var(--muted);
+}
+
+.site-footer-inner {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
 .footer-left, .footer-right {
