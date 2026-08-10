@@ -1001,8 +1001,9 @@ html.dark .chip--orange  { --tone: #fb923c; }
   justify-content: space-between;
   border-top: 1px solid var(--border);
   align-items: center;
-  padding: 20px 0;
-  margin-top: 40px;
+  padding: 20px 1.5rem;
+  margin: 40px auto 0;
+  max-width: 1220px;
   font-size: .78rem;
   color: var(--muted);
 }
