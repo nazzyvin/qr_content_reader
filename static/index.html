@@ -1,33 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070b14">
     <title>QR Content Extractor</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-    <main>
-        <h1>📷 QR Content Extractor</h1>
 
-        <div id="drop-zone">
-            <p>Drop a QR code image here</p>
-            <label for="file-input" class="btn">Choose File</label>
-            <input type="file" id="file-input" accept="image/*" hidden>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-brand">
+            <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                    <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                    <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                    <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                    <path d="M8 8h2v4H8z" />
+                    <path d="M14 8h2v4h-2z" />
+                    <path d="M8 14h2v2H8z" />
+                    <path d="M14 14h2v2h-2z" />
+                    <path d="M8 18h2v-1" />
+                    <path d="M18 8h1" />
+                    <path d="M18 12h1" />
+                    <path d="M14 18h4v1" />
+                </svg>
+            </span>
+            <div class="brand-text">
+                <span class="brand-name">QR Content Extractor</span>
+                <span class="brand-tag">Scan. Decode. Extract.</span>
+            </div>
         </div>
+        <div class="navbar-actions">
+            <button id="paste-btn" class="btn btn-ghost">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="8" y="2" width="8" height="4" rx="1" />
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                </svg>
+                <span>Paste Image</span>
+            </button>
+            <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme" title="Toggle theme"></button>
+        </div>
+    </header>
+
+    <main class="page">
+
+        <section class="hero card" aria-labelledby="hero-title">
+            <div class="hero-left">
+                <h1 class="hero-title" id="hero-title">
+                    Extract Content
+                    <span class="gradient-text">from QR Codes &amp; Barcodes</span>
+                </h1>
+                <p class="hero-sub">
+                    Scan with your camera or upload an image to instantly pull the content from any
+                    QR code or barcode in seconds. Supports QR, Code 128, EAN, UPC and more — with
+                    real-time scanning and full privacy on your device.
+                </p>
+                <ul class="feature-list" aria-label="Key features">
+                    <li class="feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
+                        Real-time Scan
+                    </li>
+                    <li class="feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        Privacy First
+                    </li>
+                    <li class="feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="2" y="2" width="20" height="20" rx="4" />
+                            <path d="M8 8h8v8H8z" />
+                            <path d="M8 8l4 6 4-4" opacity="0" />
+                        </svg>
+                        Multi-Format
+                    </li>
+                </ul>
+            </div>
+
+            <div class="hero-right">
+                <button id="camera-btn" class="scanner-card" type="button">
+                    <span class="scanner-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 8h2l2-3h8l2 3h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" />
+                            <circle cx="12" cy="13" r="3.5" />
+                        </svg>
+                    </span>
+                    <span class="scanner-title">Scan with Camera</span>
+                    <span class="scanner-desc">Use your camera to scan in real-time</span>
+                    <span class="scanner-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M5 12h14" />
+                            <path d="m13 6 6 6-6 6" />
+                        </svg>
+                    </span>
+                </button>
+
+                <div id="drop-zone" class="upload-zone" role="button" tabindex="0" aria-label="Upload an image">
+                    <span class="upload-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <path d="m7 8 5-5 5 5" />
+                            <path d="M12 3v12" />
+                        </svg>
+                    </span>
+                    <p class="upload-title">Drag &amp; drop your image here</p>
+                    <div class="upload-row">
+                        <span class="upload-or">or</span>
+                        <label for="file-input" class="btn btn-ghost" id="browse-label">Browse Files</label>
+                    </div>
+                    <small class="upload-meta">PNG, JPG, WEBP &middot; up to 10 MB</small>
+                    <input type="file" id="file-input" accept="image/*" hidden>
+                </div>
+            </div>
+        </section>
+
+        <section id="camera-panel" class="card camera-panel hidden">
+            <p class="camera-title">Point your camera at the code</p>
+            <div class="camera-frame">
+                <video id="camera" playsinline muted autoplay></video>
+                <div class="scan-line"></div>
+            </div>
+            <button id="camera-stop" class="btn btn-danger">Stop Camera</button>
+        </section>
 
         <div id="status" class="status hidden"></div>
 
-        <section id="result" class="hidden">
-            <div class="result-header">
-                <span id="type-badge" class="badge"></span>
+        <section id="picker" class="card picker hidden" aria-live="polite">
+            <div class="section-head">
+                <h3 id="picker-title"></h3>
             </div>
-            <pre id="content"></pre>
-            <div id="details"></div>
-            <h3>Actions</h3>
-            <div id="actions"></div>
+            <ul id="picker-list"></ul>
         </section>
+
+        <div class="dashboard">
+
+            <section id="history" class="panel card hidden" aria-label="Recent scans">
+                <div class="section-head">
+                    <div class="section-title">
+                        <span class="section-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="9" />
+                                <path d="M12 7v5l3 3" />
+                            </svg>
+                        </span>
+                        <h3>Recent Scans</h3>
+                    </div>
+                    <button id="clear-history" class="btn btn-ghost small">Clear All</button>
+                </div>
+                <ul id="history-list"></ul>
+                <button id="history-full" class="btn btn-ghost full hidden">View Full History</button>
+            </section>
+
+            <section class="result-area">
+                <div id="empty-state" class="empty card">
+                    <div class="empty-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                            <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                            <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                            <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                            <path d="M8 8h2v4H8z" />
+                            <path d="M14 8h2v4h-2z" />
+                            <path d="M8 14h3v-2" />
+                            <path d="M14 14h1v3" />
+                            <path d="M8 20v-1" />
+                            <path d="M15 8v1" />
+                            <path d="M18 15h3" />
+                            <path d="M18 18h3" />
+                            <path d="M8 19h2" />
+                        </svg>
+                    </div>
+                    <h3>Your decoded content will appear here</h3>
+                    <p>Upload an image or scan with your camera to extract content from any QR code or barcode.</p>
+                    <div class="empty-actions">
+                        <button id="empty-camera" class="btn btn-primary">Scan with Camera</button>
+                        <button id="empty-browse" class="btn btn-ghost">Browse Files</button>
+                    </div>
+                </div>
+
+                <section id="result" class="card result hidden" aria-live="polite">
+                    <div class="result-header">
+                        <div class="result-title">
+                            <span id="type-badge" class="chip"></span>
+                            <h2>Decoded Content</h2>
+                        </div>
+                        <button id="decode-again" class="btn btn-ghost small">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M3 12a9 9 0 1 0 3-6.7" />
+                                <path d="M3 4v5h5" />
+                            </svg>
+                            Decode Another
+                        </button>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-bar">
+                            <span class="code-label">Raw content</span>
+                            <button id="content-copy" class="icon-btn icon-btn-sm" aria-label="Copy content" title="Copy content">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" />
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                </svg>
+                            </button>
+                        </div>
+                        <pre id="content"></pre>
+                    </div>
+
+                    <div id="details"></div>
+
+                    <div id="actions" aria-label="Available actions"></div>
+                </section>
+            </section>
+
+        </div>
     </main>
+
+    <div id="toasts" aria-live="polite"></div>
+    <canvas id="frame-canvas" hidden></canvas>
+
     <script src="/static/script.js"></script>
 </body>
+
 </html>

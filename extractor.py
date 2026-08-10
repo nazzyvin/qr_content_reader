@@ -1,4 +1,4 @@
-from decoder import decode_qr_bytes
+from decoder import decode_qr_bytes, decode_all_bytes
 from detector import detect_content
 from parsers import parse_for_type
 from actions import ACTIONS
@@ -37,3 +37,19 @@ def extract_from_bytes(image_bytes):
         "details": details,
         "actions": actions
     }
+
+
+def extract_all_from_bytes(image_bytes):
+    contents = decode_all_bytes(image_bytes)
+    if not contents:
+        return {"success": False, "error": "No QR codes found in the image."}
+    results = []
+    for content in contents:
+        content_type = detect_content(content)
+        results.append({
+            "content_type": content_type,
+            "content": content,
+            "details": parse_for_type(content_type, content),
+            "actions": ACTIONS.get(content_type, [])
+        })
+    return {"success": True, "count": len(results), "results": results}
