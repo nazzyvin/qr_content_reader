@@ -365,8 +365,10 @@ function renderActions(actions) {
   actionsEl.innerHTML = "";
   if (!actions) actions = [];
 
+  const filtered = actions.filter((item) => item !== "Show Details");
+
   const extra = SHAREABLE.has(current.content_type) && navigator.share ? ["Share"] : [];
-  [...actions, ...extra].forEach((name) => {
+  [...filtered, ...extra].forEach((name) => {
     const btn = document.createElement("button");
     btn.className = "btn action" + (name === "Share" ? " action--share" : "");
     btn.innerHTML = svg(ACTION_ICONS[name] || "chevron");
@@ -392,7 +394,7 @@ function showPicker(results) {
     text.className = "item-content";
     text.textContent = `#${idx + 1} · ${item.content}`;
     li.appendChild(text);
-    li.insertAdjacentHTML("beforeend", svg("chevron", "history-chevron"));
+    li.insertAdjacentHTML("beforeend", `<span class="history-chevron">${svg("chevron")}</span>`);
     li.addEventListener("click", () => { current = item; renderResult(item); });
     pickerList.appendChild(li);
   });
@@ -543,7 +545,7 @@ function renderHistory() {
 
       body.append(headline, metaTime);
       li.appendChild(body);
-      li.insertAdjacentHTML("beforeend", svg("chevron", "history-chevron"));
+      li.insertAdjacentHTML("beforeend", `<span class="history-chevron">${svg("chevron")}</span>`);
 
       li.addEventListener("click", () => { hidePicker(); renderResult(entry.item); });
       historyList.appendChild(li);

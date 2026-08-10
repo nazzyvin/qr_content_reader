@@ -54,6 +54,8 @@ def parse_wifi(data):
 
     fields = {"ssid": "", "security": "", "password": "", "hidden": ""}
 
+    data = data[5:] if data.upper().startswith("WIFI:") else data
+
     for segment in data.split(";"):
         if segment.startswith("T:"):
             fields["security"] = segment[2:]
