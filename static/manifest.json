@@ -1,0 +1,17 @@
+{
+  "name": "QR Content Extractor",
+  "short_name": "QR Extractor",
+  "description": "Scan, decode, and extract content from QR codes and barcodes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef2f9",
+  "theme_color": "#070b14",
+  "icons": [
+    {
+      "src": "/static/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
